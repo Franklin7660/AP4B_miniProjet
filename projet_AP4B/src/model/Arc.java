@@ -1,3 +1,5 @@
+package model;
+
 public class Arc {
     private Sommet origine;
     private Sommet destination;

@@ -1,3 +1,5 @@
+package model;
+
 import java.util.List;
 public class Sommet {
     private String name = "intersection";

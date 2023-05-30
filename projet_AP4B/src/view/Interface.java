@@ -1,6 +1,8 @@
-import java.awt.*;
+package view;
+
 import javax.swing.*;
-import javax.swing.ToolTipManager;
+
+import model.Graph;
 
 public class Interface extends JFrame {
     private Graph graph;
