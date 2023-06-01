@@ -25,6 +25,7 @@ public class Graph extends JPanel {
     private double zoomScale =1.0;
     private List<Sommet> listeSommet;
     private List<Arc> listeArc;
+    private List<Rue> listeRue;
     private int startX; // Stores the initial X position when dragging
     private int startY;
     private int startOffsetY;
@@ -36,9 +37,10 @@ public class Graph extends JPanel {
     {
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
 //        setBackground(Color.BLACK);
-        listeSommet = new ArrayList<>();
-        listeArc = new ArrayList<>();
+        listeSommet = new ArrayList<Sommet>();
+        listeArc = new ArrayList<Arc>();
         customCursor = new Cursor(Cursor.HAND_CURSOR);
+        listeRue = new ArrayList<Rue>();
         Sommet s = new Sommet(50,50,"s");
         addSommet(s);
         Sommet s1= new Sommet(100,100,"s1");
@@ -49,7 +51,7 @@ public class Graph extends JPanel {
         addSommet(s2);
         Sommet s3 = new Sommet(300,200,"s3");
         addSommet(s3);
-        Arc arc1 = new Arc(s2,s3);
+        Arc arc1 = new Arc(s1,s2);
         addArc(arc1);
         Sommet s4= new Sommet(200,140,"s4");
         addSommet(s4);
@@ -61,6 +63,14 @@ public class Graph extends JPanel {
         addSommet(s7);
         Sommet s8 = new Sommet(900,400,"s7");
         addSommet(s8);
+        List <Arc> arcsofrue = new ArrayList<>();
+        arcsofrue.add(arc);
+        arcsofrue.add(arc1);
+        Rue r = new Rue("boulevard",arcsofrue);
+        addRue(r);
+
+
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -112,25 +122,47 @@ public class Graph extends JPanel {
                 int mouseY = e.getY();
 
                 boolean arcisHovered = false;
+                for(Rue rue : listeRue){
+                    for (Arc arc: rue.arcs){
+                        int originX = (int) ((arc.getOrigineX() - offsetX -250)*zoomScale +250);
+                        int originY = (int) ((arc.getOrigineY() - offsetY -250)*zoomScale +250);
+                        int destinationX = (int) ((arc.getDestinationX() - offsetX -250)*zoomScale +250);
+                        int destinationY = (int) ((arc.getDestinationY() - offsetY -250)*zoomScale +250);
+                        double distanceToArc = distanceToLineSegment(mouseX, mouseY, originX, originY, destinationX, destinationY);
 
-                for (Arc arc : listeArc) {
-                    int originX = (int) ((arc.getOrigineX() - offsetX -250)*zoomScale +250);
-                    int originY = (int) ((arc.getOrigineY() - offsetY -250)*zoomScale +250);
-                    int destinationX = (int) ((arc.getDestinationX() - offsetX -250)*zoomScale +250);
-                    int destinationY = (int) ((arc.getDestinationY() - offsetY -250)*zoomScale +250);
-                    double distanceToArc = distanceToLineSegment(mouseX, mouseY, originX, originY, destinationX, destinationY);
+                        double distanceToOrigin = sqrt(Math.pow(mouseX - originX, 2) + Math.pow(mouseY - originY, 2));
+                        double distanceToDestination = sqrt(Math.pow(mouseX - destinationX, 2) + Math.pow(mouseY - destinationY, 2));
+                        if (distanceToArc <= 5 * zoomScale && distanceToOrigin >15 &&distanceToDestination>15) {
+                            arcisHovered = true;
+                            setCursor(customCursor);
+                            String arcinfo = "Rue: "+rue.name+" Origin: "+arc.getOrigineNom()+",Destination: "+arc.getDestinationNom()+"";
+                            setToolTipText(arcinfo);
 
-                    double distanceToOrigin = sqrt(Math.pow(mouseX - originX, 2) + Math.pow(mouseY - originY, 2));
-                    double distanceToDestination = sqrt(Math.pow(mouseX - destinationX, 2) + Math.pow(mouseY - destinationY, 2));
-                    if (distanceToArc <= 5 * zoomScale && distanceToOrigin >15 &&distanceToDestination>15) {
-                        arcisHovered = true;
-                        setCursor(customCursor);
-                        String arcinfo = "Origin: "+arc.getOrigineNom()+",Destination: "+arc.getDestinationNom()+"";
-                        setToolTipText(arcinfo);
 
-                        break;
+                            break;
+                        }
+
                     }
                 }
+//                for (Arc arc : listeArc) {
+//                    int originX = (int) ((arc.getOrigineX() - offsetX -250)*zoomScale +250);
+//                    int originY = (int) ((arc.getOrigineY() - offsetY -250)*zoomScale +250);
+//                    int destinationX = (int) ((arc.getDestinationX() - offsetX -250)*zoomScale +250);
+//                    int destinationY = (int) ((arc.getDestinationY() - offsetY -250)*zoomScale +250);
+//                    double distanceToArc = distanceToLineSegment(mouseX, mouseY, originX, originY, destinationX, destinationY);
+//
+//                    double distanceToOrigin = sqrt(Math.pow(mouseX - originX, 2) + Math.pow(mouseY - originY, 2));
+//                    double distanceToDestination = sqrt(Math.pow(mouseX - destinationX, 2) + Math.pow(mouseY - destinationY, 2));
+//                    if (distanceToArc <= 5 * zoomScale && distanceToOrigin >15 &&distanceToDestination>15) {
+//                        arcisHovered = true;
+//                        setCursor(customCursor);
+//                        String arcinfo = "Origin: "+arc.getOrigineNom()+",Destination: "+arc.getDestinationNom()+"";
+//                        setToolTipText(arcinfo);
+//
+//                        break;
+//                    }
+//                }
+
 
                 if (!arcisHovered) {
                     for (Sommet sommet : listeSommet) {
@@ -140,7 +172,7 @@ public class Graph extends JPanel {
 
                         if (distanceToSommet <= 15 * zoomScale ) {
                             setCursor(customCursor);
-                            String position = ""+sommet.getNom()+" (" + sommetX + "," + sommetY + ")";
+                            String position = ""+sommet.getNom()+" (" + sommet.getX()+ "," + sommet.getY() + ")";
                             setToolTipText(position);
                             break;
                         } else {
@@ -178,7 +210,18 @@ public class Graph extends JPanel {
             int destinationY = arc.getDestinationY();
             g2d.drawLine(origineX, origineY, destinationX, destinationY);
         }
-
+        g2d.setColor(Color.black);
+        for(Rue rue : listeRue){
+            for (Arc arc: rue.arcs){
+                int origineX = arc.getOrigineX();
+                int origineY = arc.getOrigineY();
+                int destinationX = arc.getDestinationX();
+                int destinationY = arc.getDestinationY();
+                Stroke stroke = new BasicStroke(2f);
+                g2d.setStroke(stroke);
+                g2d.drawLine(origineX, origineY, destinationX, destinationY);
+            }
+        }
         g2d.dispose();
     }
 
@@ -212,7 +255,7 @@ public class Graph extends JPanel {
         listeArc.add(arc);
     }
 
-
+    public void addRue(Rue rue){listeRue.add(rue);}
 
     public static double distanceToLineSegment(double px, double py, double x1, double y1, double x2, double y2) {
         double dx = x2 - x1;
