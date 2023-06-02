@@ -2,45 +2,31 @@ package view;
 
 import javax.swing.*;
 import javax.swing.JButton;
+import java.awt.*;
 
 import model.Graph;
 
 public class Interface extends JFrame {
     private Graph graph;
+    public GraphView graphView;
     private JButton zoomIN;
     private JButton zoomOUT;
 
-    public Interface() {
-        setTitle("My Application");
+    public Interface(int graphWidth, int graphHeight, Graph graph) {
+
+        setTitle("Graph Interface");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1280, 720);
+        setSize(1920, 1080);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
-        graph = new Graph();
+        Container c = getContentPane();
+        c.setLayout(null);
+        c.setBackground( new java.awt.Color(69, 123, 157) );
 
-        getContentPane().setLayout(null);
+        graphView = new GraphView(graphWidth,graphHeight,graph);
+        graphView.setBounds(230,50,graphWidth,graphHeight);
 
-//        zoomIN = new JButton("ZoomIN");
-//        zoomIN.setBounds(50,50,100,20);
-//        zoomIN.addActionListener(e -> graph.zoomIn());
-//
-//        zoomOUT = new JButton("ZoomOUT");
-//        zoomOUT.setBounds(50,150,100,20);
-//        zoomOUT.addActionListener(e -> graph.zoomOut());
-
-
-//        zoomIN = new JButton("ZoomIN");
-//
-//        zoomIN.setBounds(50,750,100,20);
-//        zoomIN.addActionListener(e -> graph.zoomIn());
-//        zoomOUT = new JButton("ZoomOUT");
-//        zoomOUT.setBounds(50,650,100,20);
-//        zoomOUT.addActionListener(e -> graph.zoomOut());
-
-        int x = (getWidth()-500) / 2;
-        int y = (getHeight() - 500) / 2;
-
-        graph.setBounds(x,y,500,500);
-        getContentPane().add(graph);
+        getContentPane().add(graphView);
 
         setVisible(true);
     }

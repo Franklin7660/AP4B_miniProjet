@@ -1,10 +1,14 @@
+import controller.Control;
+import model.Graph;
 import view.Interface;
 public class Main {
     public static void main(String[] args) {
 
+        Graph graph = new Graph();
 
-      new Interface();
+        Interface inter = new Interface(1280,720,graph);
 
+        new Control(inter);
 
     }
  }
