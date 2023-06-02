@@ -17,8 +17,8 @@ public class Rue {
 
     public List<Arc> arcs;
 
-    public Rue(String name, List<Arc> arcs){
+    public Rue(String name){
+        arcs = new ArrayList<>();
         this.name = name;
-        this.arcs = arcs;
     }
 }

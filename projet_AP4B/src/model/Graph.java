@@ -1,7 +1,9 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
+
+import java.nio.file.*;
 
 import static java.lang.Math.sqrt;
 
@@ -17,36 +19,93 @@ public class Graph {
         listeArc = new ArrayList<Arc>();
         listeRue = new ArrayList<Rue>();
 
-        Sommet s = new Sommet(50,50,"s");
-        addSommet(s);
-        Sommet s1= new Sommet(100,100,"s1");
-        addSommet(s1);
-        Arc arc = new Arc(s,s1);
-        addArc(arc);
-        Sommet s2 = new Sommet(200,200,"s2");
-        addSommet(s2);
-        Sommet s3 = new Sommet(300,200,"s3");
-        addSommet(s3);
-        Arc arc1 = new Arc(s1,s2);
-        addArc(arc1);
-        Sommet s4= new Sommet(200,140,"s4");
-        addSommet(s4);
-        Sommet s5 = new Sommet(30,400,"s5");
-        addSommet(s5);
-        Sommet s6 = new Sommet(70,280,"s6");
-        addSommet(s6);
-        Sommet s7 = new Sommet(200,400,"s7");
-        addSommet(s7);
-        Sommet s8 = new Sommet(900,400,"s7");
-        addSommet(s8);
-        List <Arc> arcsofrue = new ArrayList<>();
-        arcsofrue.add(arc);
-        arcsofrue.add(arc1);
-        Rue r = new Rue("boulevard",arcsofrue);
-        addRue(r);
-
+        buildFromFile("test.txt");
     }
 
+    public void buildFromFile(String fileName){
+        try {
+            File file = new File("src/saved_files/" + fileName);
+            BufferedReader buffer = new BufferedReader(new FileReader(file));
+
+            String line = "";
+            while (!Objects.equals((line = buffer.readLine()), "end")){
+                System.out.println(line);
+                String[] subStrings = line.split(" ");
+                String objectType = subStrings[0];
+
+                if (Objects.equals(objectType, "sommet")){
+                    String[] attributes = Arrays.copyOfRange(subStrings, 1, subStrings.length);
+                    int id =0;
+                    int x =0;
+                    int y =0;
+                    String nom = "unnamed";
+
+                    for(String attribute : attributes){
+                        String[] separated = attribute.split("=");
+                        String name = separated[0];
+                        String value = separated[1];
+
+                        if (Objects.equals(name, "id")){id = Integer.parseInt(value);}
+                        else if (Objects.equals(name, "x")){x = Integer.parseInt(value);}
+                        else if (Objects.equals(name, "y")){y = Integer.parseInt(value);}
+                        else if (Objects.equals(name, "nom")){nom = value;}
+                    }
+                    addSommet(new Sommet(id,x,y,nom));
+                }
+
+                else if(Objects.equals(objectType, "rue")){
+                    String[] attributes = Arrays.copyOfRange(subStrings, 1, subStrings.length);
+                    String nom = "unnamed";
+
+                    for(String attribute : attributes){
+                        String[] separated = attribute.split("=");
+                        String name = separated[0];
+                        String value = separated[1];
+
+                        if (Objects.equals(name, "nom")){nom = value;}
+                    }
+                    addRue(new Rue(nom));
+                }
+
+                else if(Objects.equals(objectType, "arc")){
+                    String[] attributes = Arrays.copyOfRange(subStrings, 1, subStrings.length);
+                    int or =0;
+                    int dest =0;
+                    String rue = "unnamed";
+
+                    for(String attribute : attributes){
+                        String[] separated = attribute.split("=");
+                        String name = separated[0];
+                        String value = separated[1];
+
+                        if (Objects.equals(name, "or")){or = Integer.parseInt(value);}
+                        else if (Objects.equals(name, "dest")){dest = Integer.parseInt(value);}
+                        else if (Objects.equals(name, "rue")){rue = value;}
+                    }
+                    addArc(new Arc(getSommetById(or),getSommetById(dest),getRueByName(rue)));
+                }
+            }
+
+
+        } catch (IOException e) {
+            System.out.println("Error : Graph file was not found");
+        }
+    }
+
+    private Sommet getSommetById(int id){
+        for(Sommet sommet : listeSommet){if (sommet.getId() == id){
+            return sommet;
+        }}
+        System.out.println("Error : No sommet with that id");
+        return null;
+    }
+    private Rue getRueByName(String name){
+        for(Rue rue : listeRue){if (Objects.equals(rue.name, name)){
+            return rue;
+        }}
+        System.out.println("Error : No rue with that name");
+        return null;
+    }
     public void addSommet(Sommet sommet){listeSommet.add(sommet);}
     public void addArc(Arc arc){listeArc.add(arc);}
     public void addRue(Rue rue){listeRue.add(rue);}

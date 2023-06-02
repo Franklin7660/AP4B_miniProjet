@@ -6,9 +6,10 @@ public class Arc {
     private float distance;
     private Rue rue;
 
-    public Arc(Sommet origine, Sommet destination){
+    public Arc(Sommet origine, Sommet destination,Rue rue){
         this.origine = origine;
         this.destination = destination;
+        rue.arcs.add(this);
 
     }
     public Sommet getOrigine(){
