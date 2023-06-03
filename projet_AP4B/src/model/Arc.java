@@ -4,13 +4,13 @@ public class Arc {
     private Sommet origine;
     private Sommet destination;
     private float distance;
-    private Rue rue;
+    public Rue rue;
 
-    public Arc(Sommet origine, Sommet destination,Rue rue){
+    public Arc(Sommet origine, Sommet destination,Rue rue_){
         this.origine = origine;
         this.destination = destination;
+        this.rue = rue_;
         rue.arcs.add(this);
-
     }
     public Sommet getOrigine(){
         return  origine;

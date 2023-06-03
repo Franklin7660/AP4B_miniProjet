@@ -82,7 +82,7 @@ public class GraphView extends JPanel {
                 if (distanceToArc <= 5 * zoomScale && distanceToOrigin >8 &&distanceToDestination>8) {
                     arcisHovered = true;
                     setCursor(customCursor);
-                    String arcinfo = "Rue: "+rue.name+" Origin: "+arc.getOrigineNom()+",Destination: "+arc.getDestinationNom()+"";
+                    String arcinfo = "Rue: "+rue.name;
                     setToolTipText(arcinfo);
 
                     break;

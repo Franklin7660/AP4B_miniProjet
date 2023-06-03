@@ -11,7 +11,6 @@ public class Graph {
     public List<Sommet> listeSommet;
     public List<Arc> listeArc;
     public List<Rue> listeRue;
-
     public Graph()
     {
 
@@ -19,7 +18,8 @@ public class Graph {
         listeArc = new ArrayList<Arc>();
         listeRue = new ArrayList<Rue>();
 
-        buildFromFile("test.txt");
+        buildFromFile("testExport.txt");
+        export("testExport.txt");
     }
 
     public void buildFromFile(String fileName){
@@ -29,7 +29,6 @@ public class Graph {
 
             String line = "";
             while (!Objects.equals((line = buffer.readLine()), "end")){
-                System.out.println(line);
                 String[] subStrings = line.split(" ");
                 String objectType = subStrings[0];
 
@@ -89,6 +88,45 @@ public class Graph {
 
         } catch (IOException e) {
             System.out.println("Error : Graph file was not found");
+            e.printStackTrace();
+        }
+    }
+
+    public void export(String fileName){
+
+        String output = "";
+
+        for(Sommet sommet : listeSommet){
+            output += "sommet id=" + sommet.getId() + " x=" + sommet.getX() + " y=" + sommet.getY() + "\n" ;
+        }
+        output += "\n";
+        for(Rue rue : listeRue){
+            output += "rue nom=" + rue.name + "\n" ;
+        }
+        output += "\n";
+        for(Arc arc : listeArc){
+            output += "arc or=" + arc.getOrigine().getId() + " dest=" + arc.getDestination().getId() + " rue=" + arc.rue.name + "\n" ;
+        }
+
+        output += "\nend";
+
+        String path = "src/saved_files/" + fileName;
+        File myObj = new File(path);
+        try{
+            if (myObj.createNewFile()) {
+                System.out.println("Creating file: " + myObj.getName());
+            } else {
+                System.out.println("Editing file: " + myObj.getName());
+            }
+
+            FileWriter myWriter = new FileWriter(path);
+            myWriter.write(output);
+
+            myWriter.close();
+
+        } catch (IOException e){
+            System.out.println("Error: could not create file  " + myObj.getName());
+            e.printStackTrace();
         }
     }
 
@@ -136,5 +174,4 @@ public class Graph {
         double closestY = y1 + t * dy;
         return sqrt((px - closestX) * (px - closestX) + (py - closestY) * (py - closestY));
     }
-
 }

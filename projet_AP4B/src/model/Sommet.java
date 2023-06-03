@@ -6,7 +6,7 @@ public class Sommet {
     private String nom ;
     private int x;
     private int y;
-    private List<Arc> listeArc;
+    public List<Arc> listeArc;
 
     public Sommet(int id,int x, int y , String nom){
         this.id = id;
