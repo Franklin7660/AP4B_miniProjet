@@ -91,7 +91,6 @@ public class Graph {
             e.printStackTrace();
         }
     }
-
     public void export(String fileName){
 
         String output = "";
@@ -129,7 +128,6 @@ public class Graph {
             e.printStackTrace();
         }
     }
-
     private Sommet getSommetById(int id){
         for(Sommet sommet : listeSommet){if (sommet.getId() == id){
             return sommet;

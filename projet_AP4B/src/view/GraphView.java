@@ -23,6 +23,8 @@ public class GraphView extends JPanel {
     private int startOffsetX; // Stores the initial offsetX when dragging
     private Cursor customCursor;
     private Graph graph;
+    private Sommet selectedSommet;
+    private Arc selectedArc;
 
 
     public GraphView(int graphWidth,int graphHeight, Graph pgraph) {
@@ -37,11 +39,46 @@ public class GraphView extends JPanel {
         customCursor = new Cursor(Cursor.HAND_CURSOR);
     }
 
-    public void refreshOffset(int mouseX, int mouseY){
+    public void click(int mouseX, int mouseY){
         startX = mouseX;
         startY = mouseY;
         startOffsetY = offsetY;
         startOffsetX = offsetX;
+
+        selectedArc = null;
+        selectedSommet = null;
+
+        for (Sommet sommet : graph.listeSommet) {
+            int[] coordinates = modelToScreenCoordinates(sommet.getX(),sommet.getY());
+
+            double distanceToSommet = sqrt(Math.pow(mouseX - coordinates[0], 2) + Math.pow(mouseY - coordinates[1], 2));
+
+            if (distanceToSommet <= 8 * zoomScale ) {
+                selectedSommet = sommet;
+                repaint();
+                break;
+            }
+        }
+
+        if (selectedSommet == null) {
+            for(Rue rue : graph.listeRue){
+                for (Arc arc: rue.arcs){
+                    int[] origin = modelToScreenCoordinates(arc.getOrigineX(),arc.getOrigineY());
+                    int[] destination = modelToScreenCoordinates(arc.getDestinationX(),arc.getDestinationY());
+                    double distanceToArc = Graph.distanceToLineSegment(mouseX, mouseY, origin[0], origin[1], destination[0], destination[1]);
+
+                    if (distanceToArc <= 5 * zoomScale ) {
+                        selectedArc = arc;
+                        repaint();
+                        break;
+                    }
+                }
+            }
+            if(selectedArc==null){
+                setCursor(Cursor.getDefaultCursor());
+            }
+        }
+
     }
 
     public void move(int mouseX, int mouseY){
@@ -65,21 +102,23 @@ public class GraphView extends JPanel {
         repaint();
     }
 
+    private int[] modelToScreenCoordinates(int x, int y){
+        int X = (int) ((x - offsetX -width/2)*zoomScale +width/2);
+        int Y = (int) ((y - offsetY -height/2)*zoomScale +height/2);
+        return new int[]{X,Y};
+    }
+
     public void checkHover(int mouseX, int mouseY){
 
         boolean arcisHovered = false;
 
         for(Rue rue : graph.listeRue){
             for (Arc arc: rue.arcs){
-                int originX = (int) ((arc.getOrigineX() - offsetX -width/2)*zoomScale +width/2);
-                int originY = (int) ((arc.getOrigineY() - offsetY -height/2)*zoomScale +height/2);
-                int destinationX = (int) ((arc.getDestinationX() - offsetX -width/2)*zoomScale +width/2);
-                int destinationY = (int) ((arc.getDestinationY() - offsetY -height/2)*zoomScale +height/2);
-                double distanceToArc = Graph.distanceToLineSegment(mouseX, mouseY, originX, originY, destinationX, destinationY);
+                int[] origin = modelToScreenCoordinates(arc.getOrigineX(),arc.getOrigineY());
+                int[] destination = modelToScreenCoordinates(arc.getDestinationX(),arc.getDestinationY());
+                double distanceToArc = Graph.distanceToLineSegment(mouseX, mouseY, origin[0], origin[1], destination[0], destination[1]);
 
-                double distanceToOrigin = sqrt(Math.pow(mouseX - originX, 2) + Math.pow(mouseY - originY, 2));
-                double distanceToDestination = sqrt(Math.pow(mouseX - destinationX, 2) + Math.pow(mouseY - destinationY, 2));
-                if (distanceToArc <= 5 * zoomScale && distanceToOrigin >8 &&distanceToDestination>8) {
+                if (distanceToArc <= 5 * zoomScale ) {
                     arcisHovered = true;
                     setCursor(customCursor);
                     String arcinfo = "Rue: "+rue.name;
@@ -93,10 +132,9 @@ public class GraphView extends JPanel {
 
         if (!arcisHovered) {
             for (Sommet sommet : graph.listeSommet) {
-                int sommetX = (int) ((sommet.getX() - offsetX -width/2)*zoomScale +width/2);
-                int sommetY = (int) ((sommet.getY() - offsetY -height/2)*zoomScale +height/2);
+                int[] coordinates = modelToScreenCoordinates(sommet.getX(),sommet.getY());
 
-                double distanceToSommet = sqrt(Math.pow(mouseX - sommetX, 2) + Math.pow(mouseY - sommetY, 2));
+                double distanceToSommet = sqrt(Math.pow(mouseX - coordinates[0], 2) + Math.pow(mouseY - coordinates[1], 2));
 
                 if (distanceToSommet <= 8 * zoomScale ) {
                     setCursor(customCursor);
@@ -119,7 +157,6 @@ public class GraphView extends JPanel {
         g2d.scale(zoomScale, zoomScale);
         g2d.translate(-offsetX-width/2,-offsetY-height/2);
 
-
         g2d.setColor(new java.awt.Color(69, 123, 157));
         for (Sommet sommet : graph.listeSommet) {
             int x = sommet.getX();
@@ -139,6 +176,23 @@ public class GraphView extends JPanel {
                 g2d.drawLine(origineX, origineY, destinationX, destinationY);
             }
         }
+
+        g2d.setColor(new java.awt.Color(230, 57, 70));
+        if (selectedSommet!=null){
+            int x = selectedSommet.getX();
+            int y = selectedSommet.getY();
+            g2d.fillOval(x - 8, y - 8, 16, 16);
+        }
+        else if (selectedArc!=null){
+            int origineX = selectedArc.getOrigineX();
+            int origineY = selectedArc.getOrigineY();
+            int destinationX = selectedArc.getDestinationX();
+            int destinationY = selectedArc.getDestinationY();
+            Stroke stroke = new BasicStroke(4f);
+            g2d.setStroke(stroke);
+            g2d.drawLine(origineX, origineY, destinationX, destinationY);
+        }
+
         g2d.dispose();
     }
 }

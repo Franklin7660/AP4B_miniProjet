@@ -13,7 +13,7 @@ public class Control {
         inter.graphView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                inter.graphView.refreshOffset(e.getX(),e.getY());
+                inter.graphView.click(e.getX(),e.getY());
             }
         });
 
