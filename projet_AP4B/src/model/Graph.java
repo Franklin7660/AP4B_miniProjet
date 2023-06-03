@@ -17,12 +17,13 @@ public class Graph {
         listeSommet = new ArrayList<Sommet>();
         listeArc = new ArrayList<Arc>();
         listeRue = new ArrayList<Rue>();
-
-        buildFromFile("testExport.txt");
-        export("testExport.txt");
     }
 
     public void buildFromFile(String fileName){
+        listeSommet = new ArrayList<Sommet>();
+        listeArc = new ArrayList<Arc>();
+        listeRue = new ArrayList<Rue>();
+
         try {
             File file = new File("src/saved_files/" + fileName);
             BufferedReader buffer = new BufferedReader(new FileReader(file));

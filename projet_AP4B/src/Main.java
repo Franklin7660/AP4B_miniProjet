@@ -6,9 +6,9 @@ public class Main {
 
         Graph graph = new Graph();
 
-        Interface inter = new Interface(1280,720,graph);
+        Interface inter = new Interface(1280,740,graph);
 
-        new Control(inter);
+        new Control(inter,graph);
 
     }
  }

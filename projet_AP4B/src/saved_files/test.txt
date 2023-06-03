@@ -1,0 +1,33 @@
+sommet id=1 x=100 y=50
+sommet id=2 x=200 y=50
+sommet id=3 x=300 y=50
+sommet id=4 x=400 y=50
+sommet id=5 x=100 y=200
+sommet id=6 x=200 y=250
+sommet id=7 x=300 y=300
+sommet id=8 x=400 y=300
+
+rue nom=Jean_Jaures
+rue nom=Frank_Russel
+rue nom=Jason_Boulos
+rue nom=Francois_Delcroix
+rue nom=Mouad_Boufenzi
+rue nom=James_Bond
+
+
+arc or=1 dest=2 rue=Jean_Jaures
+arc or=2 dest=3 rue=Jean_Jaures
+arc or=3 dest=4 rue=Jean_Jaures
+
+arc or=5 dest=6 rue=Frank_Russel
+arc or=6 dest=7 rue=Frank_Russel
+arc or=7 dest=8 rue=Frank_Russel
+
+arc or=1 dest=5 rue=Jason_Boulos
+arc or=2 dest=6 rue=Francois_Delcroix
+arc or=3 dest=7 rue=Mouad_Boufenzi
+arc or=4 dest=8 rue=James_Bond
+
+
+
+end

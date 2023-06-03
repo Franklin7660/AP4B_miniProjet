@@ -23,8 +23,8 @@ public class GraphView extends JPanel {
     private int startOffsetX; // Stores the initial offsetX when dragging
     private Cursor customCursor;
     private Graph graph;
-    private Sommet selectedSommet;
-    private Arc selectedArc;
+    public Sommet selectedSommet;
+    public Arc selectedArc;
 
 
     public GraphView(int graphWidth,int graphHeight, Graph pgraph) {
