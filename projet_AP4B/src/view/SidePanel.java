@@ -10,9 +10,16 @@ public class SidePanel extends JPanel {
     public JButton exportButton;
     public JButton importButton;
     public TextField graphName;
-
+    public JButton InsertSommet;
     public JLabel infoLabel;
+    public TextField Xsommet;
+    public TextField Ysommet;
 
+    public JLabel X;
+
+    public JLabel y;
+    public JPanel Insertoption;
+    public JLabel Insertresponse;
     public SidePanel(){
         setBackground(new java.awt.Color(241, 250, 238));
         setBorder(BorderFactory.createLineBorder(new java.awt.Color(29, 53, 87),4));
@@ -43,6 +50,21 @@ public class SidePanel extends JPanel {
         editManager.add(deleteButton);
 
         add(editManager);
+        Insertoption = new JPanel();
+        InsertSommet = new JButton("Add Sommet");
+        X = new JLabel("X :");
+        y = new JLabel("Y");
+        Insertoption.add(InsertSommet);
+        Insertoption.add(X);
+
+        Xsommet = new TextField("");
+        Ysommet = new TextField("");
+        Insertoption.add(Xsommet);
+        Insertoption.add(y);
+        Insertoption.add(Ysommet);
+        editManager.add(Insertoption);
+        Insertresponse = new JLabel();
+        editManager.add(Insertresponse);
 
     }
 }

@@ -2,11 +2,13 @@ package controller;
 import model.Graph;
 import view.Interface;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.io.File;
 public class Control {
 
 
@@ -35,13 +37,60 @@ public class Control {
                 inter.sidePanel.infoLabel.setText("Graph exporté !");
             }
         });
-
-        inter.sidePanel.importButton.addActionListener(new ActionListener() {
+        inter.sidePanel.InsertSommet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                graph.buildFromFile(inter.sidePanel.graphName.getText() + ".txt");
-                inter.sidePanel.infoLabel.setText("Graph importé !");
-                inter.repaint();
+                int x = Integer.parseInt(inter.sidePanel.Xsommet.getText());
+                int y = Integer.parseInt(inter.sidePanel.Ysommet.getText());
+                inter.graphView.InsertSommet(x,y);
+                if(inter.graphView.canAdd){
+                    inter.sidePanel.Insertresponse.setText("sommet ajoutée");
+                }
+                else{
+                    inter.sidePanel.Insertresponse.setText("sommet déja éxiste");
+                }
+
+
+
+            }
+        });
+
+//        inter.sidePanel.importButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                graph.buildFromFile(inter.sidePanel.graphName.getText() + ".txt");
+//                inter.sidePanel.infoLabel.setText("Graph importé !");
+//                inter.repaint();
+//            }
+//        });
+        inter.sidePanel.importButton.addActionListener(new ActionListener() {
+            JLabel nameLabel;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedfileName = "";
+
+                JFileChooser fileChooser = new JFileChooser();
+                int result = fileChooser.showOpenDialog(inter.graphView);
+                if(result==JFileChooser.APPROVE_OPTION){
+                    File selectedfile = fileChooser.getSelectedFile();
+                    graph.buildFromFile(selectedfile);
+                    selectedfileName = selectedfile.getName();
+
+                    if (nameLabel != null) {
+                        inter.remove(nameLabel);
+                    }
+
+                    nameLabel = new JLabel();
+                    nameLabel.setText("  "+selectedfileName);
+                    nameLabel.setBounds(250, 15, 70, 13);
+                    nameLabel.setOpaque(true);
+                    nameLabel.setBackground(Color.WHITE);
+                    inter.add(nameLabel);
+                    inter.repaint();
+
+//                    inter.graphView.repaint();
+                }
+
             }
         });
 

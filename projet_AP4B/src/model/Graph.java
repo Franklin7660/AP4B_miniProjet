@@ -2,7 +2,7 @@ package model;
 
 import java.io.*;
 import java.util.*;
-
+import java.io.File;
 import java.nio.file.*;
 
 import static java.lang.Math.sqrt;
@@ -19,13 +19,13 @@ public class Graph {
         listeRue = new ArrayList<Rue>();
     }
 
-    public void buildFromFile(String fileName){
+    public void buildFromFile(File file){
         listeSommet = new ArrayList<Sommet>();
         listeArc = new ArrayList<Arc>();
         listeRue = new ArrayList<Rue>();
 
         try {
-            File file = new File("src/saved_files/" + fileName);
+
             BufferedReader buffer = new BufferedReader(new FileReader(file));
 
             String line = "";

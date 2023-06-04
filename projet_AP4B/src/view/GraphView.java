@@ -7,6 +7,7 @@ import model.Sommet;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 import static java.lang.Math.sqrt;
 
@@ -25,7 +26,7 @@ public class GraphView extends JPanel {
     private Graph graph;
     public Sommet selectedSommet;
     public Arc selectedArc;
-
+    public boolean canAdd ;
 
     public GraphView(int graphWidth,int graphHeight, Graph pgraph) {
         graph = pgraph;
@@ -147,6 +148,27 @@ public class GraphView extends JPanel {
                 }
             }
         }
+    }
+    public void InsertSommet(int x, int y){
+        int a = 0;
+
+                for(Sommet som :graph.listeSommet){
+                    if(som.getY() == y && som.getX()==x){
+                        a+=1;
+                    }
+                }
+                if(a==0){
+                    Sommet s = new Sommet(200,x,y,"unnamed");
+                    graph.addSommet(s);
+                    canAdd = true;
+                    repaint();
+                }
+                else{
+                    canAdd = false;
+                }
+
+
+
     }
 
     @Override
