@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 public class Control {
 
 
@@ -54,6 +56,25 @@ public class Control {
 
             }
         });
+        inter.sidePanel.exportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setApproveButtonText("Save");
+                fileChooser.setSelectedFile(new File("myFile.txt"));
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
+                fileChooser.setFileFilter(filter);
+
+                int result = fileChooser.showOpenDialog(inter.graphView);
+                if(result==JFileChooser.APPROVE_OPTION){
+                    File selectedfile = fileChooser.getSelectedFile();
+                    graph.export(selectedfile.getPath());
+
+                }
+
+
+            }
+        });
 
 //        inter.sidePanel.importButton.addActionListener(new ActionListener() {
 //            @Override
@@ -70,6 +91,9 @@ public class Control {
                 String selectedfileName = "";
 
                 JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
+
+                fileChooser.setFileFilter(filter);
                 int result = fileChooser.showOpenDialog(inter.graphView);
                 if(result==JFileChooser.APPROVE_OPTION){
                     File selectedfile = fileChooser.getSelectedFile();

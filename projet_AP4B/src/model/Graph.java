@@ -92,7 +92,7 @@ public class Graph {
             e.printStackTrace();
         }
     }
-    public void export(String fileName){
+    public void export(String path){
 
         String output = "";
 
@@ -110,7 +110,7 @@ public class Graph {
 
         output += "\nend";
 
-        String path = "src/saved_files/" + fileName;
+//        String path = "src/saved_files/" + fileName;
         File myObj = new File(path);
         try{
             if (myObj.createNewFile()) {
