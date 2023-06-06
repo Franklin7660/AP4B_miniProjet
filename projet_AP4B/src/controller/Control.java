@@ -1,5 +1,8 @@
 package controller;
+import model.Arc;
 import model.Graph;
+import model.Rue;
+import model.Sommet;
 import view.Interface;
 
 import javax.swing.*;
@@ -20,6 +23,9 @@ public class Control {
             @Override
             public void mousePressed(MouseEvent e) {
                 inter.graphView.click(e.getX(),e.getY());
+                if(inter.graphView.selectedArc != null){
+                    inter.sidePanel.setRue.setText(inter.graphView.selectedArc.rue.name);
+                }
             }
         });
 
@@ -27,7 +33,7 @@ public class Control {
 
         inter.graphView.addMouseMotionListener(new MouseAdapter() {
             @Override
-            public void mouseDragged(MouseEvent e) { inter.graphView.move(e.getX(),e.getY());}
+            public void mouseDragged(MouseEvent e) { inter.graphView.mouseGrab(e.getX(),e.getY());}
             @Override
             public void mouseMoved(MouseEvent e) { inter.graphView.checkHover(e.getX(),e.getY()); }
         });
@@ -39,6 +45,7 @@ public class Control {
                 inter.sidePanel.infoLabel.setText("Graph exporté !");
             }
         });
+
         inter.sidePanel.InsertSommet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -56,6 +63,22 @@ public class Control {
 
             }
         });
+
+        inter.sidePanel.InsertArc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Sommet or = inter.graphView.selectedSommet;
+                Sommet dest = inter.graphView.selectedDestination;
+                Rue rue = graph.getRueByName(inter.sidePanel.setRue.getText());
+                boolean doubleSens = inter.sidePanel.doubleSens.isSelected();
+                graph.addArc(new Arc(or,dest,rue));
+                if(doubleSens){
+                    graph.addArc(new Arc(dest,or,rue));
+                }
+                inter.repaint();
+            }
+        });
+
         inter.sidePanel.exportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,14 +99,6 @@ public class Control {
             }
         });
 
-//        inter.sidePanel.importButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                graph.buildFromFile(inter.sidePanel.graphName.getText() + ".txt");
-//                inter.sidePanel.infoLabel.setText("Graph importé !");
-//                inter.repaint();
-//            }
-//        });
         inter.sidePanel.importButton.addActionListener(new ActionListener() {
             JLabel nameLabel;
             @Override
@@ -122,14 +137,13 @@ public class Control {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (inter.graphView.selectedSommet != null){
-                    graph.listeSommet.remove(inter.graphView.selectedSommet);
+                    graph.deleteElement(inter.graphView.selectedSommet);
                     inter.sidePanel.infoLabel.setText("Sommet supprimé !");
                     inter.graphView.selectedSommet = null;
                     inter.repaint();
                 }
                 else if (inter.graphView.selectedArc != null){
-                    inter.graphView.selectedArc.rue.arcs.remove(inter.graphView.selectedArc);
-                    graph.listeArc.remove(inter.graphView.selectedArc);
+                    graph.deleteElement(inter.graphView.selectedArc);
                     inter.sidePanel.infoLabel.setText("Arc supprimé !");
                     inter.graphView.selectedArc = null;
                     inter.repaint();

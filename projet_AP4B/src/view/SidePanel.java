@@ -6,11 +6,14 @@ import java.awt.*;
 public class SidePanel extends JPanel {
     private JPanel fileManager;
     private JPanel editManager;
+    public JCheckBox doubleSens;
     public JButton deleteButton;
     public JButton exportButton;
     public JButton importButton;
     public TextField graphName;
+    public TextField setRue;
     public JButton InsertSommet;
+    public JButton InsertArc;
     public JLabel infoLabel;
     public TextField Xsommet;
     public TextField Ysommet;
@@ -49,9 +52,9 @@ public class SidePanel extends JPanel {
         deleteButton = new JButton("Supprimer");
         editManager.add(deleteButton);
 
-        add(editManager);
         Insertoption = new JPanel();
-        InsertSommet = new JButton("Add Sommet");
+        Insertoption.setLayout(new GridLayout(0,1));
+        InsertSommet = new JButton("Ajouter sommet");
         X = new JLabel("X :");
         y = new JLabel("Y");
         Insertoption.add(InsertSommet);
@@ -63,8 +66,28 @@ public class SidePanel extends JPanel {
         Insertoption.add(y);
         Insertoption.add(Ysommet);
         editManager.add(Insertoption);
+
+        InsertArc = new JButton("Ajouter arc");
+        editManager.add(InsertArc);
+
+        JPanel editRue = new JPanel();
+        editManager.add(editRue);
+
+        editRue.add(new JLabel("Nom de rue :"));
+
+        setRue = new TextField("Nom de rue");
+        setRue.setMaximumSize(new Dimension(280,20));
+        editRue.add(setRue);
+
+        editManager.add(editRue);
+
+        doubleSens = new JCheckBox("Double Sens");
+        editManager.add(doubleSens);
+
         Insertresponse = new JLabel();
         editManager.add(Insertresponse);
+
+        add(editManager);
 
     }
 }

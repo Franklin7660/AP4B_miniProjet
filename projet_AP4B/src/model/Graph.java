@@ -19,6 +19,29 @@ public class Graph {
         listeRue = new ArrayList<Rue>();
     }
 
+    public void deleteElement(Object o){
+        if(o instanceof Arc){
+            ((Arc) o).rue.arcs.remove(o);
+            listeArc.remove(o);
+        }
+        else if (o instanceof Sommet){
+            List<Arc> trash = new ArrayList<Arc>();
+            for(Arc arc : listeArc){
+                if (o == arc.getOrigine() || o == arc.getDestination() ){
+                    System.out.println("Arc added to trash");
+                    trash.add(arc);
+                }
+            }
+            for(Arc arc : trash){
+                deleteElement(arc);
+            }
+            listeSommet.remove(o);
+        }
+        else{
+            System.out.println("Error during deletion");
+        }
+    }
+
     public void buildFromFile(File file){
         listeSommet = new ArrayList<Sommet>();
         listeArc = new ArrayList<Arc>();
@@ -71,6 +94,7 @@ public class Graph {
                     String[] attributes = Arrays.copyOfRange(subStrings, 1, subStrings.length);
                     int or =0;
                     int dest =0;
+                    int dSens = 1;
                     String rue = "unnamed";
 
                     for(String attribute : attributes){
@@ -81,8 +105,12 @@ public class Graph {
                         if (Objects.equals(name, "or")){or = Integer.parseInt(value);}
                         else if (Objects.equals(name, "dest")){dest = Integer.parseInt(value);}
                         else if (Objects.equals(name, "rue")){rue = value;}
+                        else if (Objects.equals(name, "doublesens")){dSens = Integer.parseInt(value);}
                     }
                     addArc(new Arc(getSommetById(or),getSommetById(dest),getRueByName(rue)));
+                    if(dSens==1){
+                        addArc(new Arc(getSommetById(dest),getSommetById(or),getRueByName(rue)));
+                    }
                 }
             }
 
@@ -136,12 +164,14 @@ public class Graph {
         System.out.println("Error : No sommet with that id");
         return null;
     }
-    private Rue getRueByName(String name){
+    public Rue getRueByName(String name){
         for(Rue rue : listeRue){if (Objects.equals(rue.name, name)){
             return rue;
         }}
-        System.out.println("Error : No rue with that name");
-        return null;
+        System.out.println("Creating rue: " + name);
+        Rue created = new Rue(name);
+        addRue(created);
+        return created;
     }
     public void addSommet(Sommet sommet){listeSommet.add(sommet);}
     public void addArc(Arc arc){listeArc.add(arc);}

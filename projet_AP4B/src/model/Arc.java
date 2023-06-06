@@ -3,13 +3,14 @@ package model;
 public class Arc {
     private Sommet origine;
     private Sommet destination;
+    public boolean doubleSens;
     private float distance;
     public Rue rue;
 
-    public Arc(Sommet origine, Sommet destination,Rue rue_){
-        this.origine = origine;
-        this.destination = destination;
-        this.rue = rue_;
+    public Arc(Sommet origine_, Sommet destination_,Rue rue_){
+        origine = origine_;
+        destination = destination_;
+        rue = rue_;
         rue.arcs.add(this);
     }
     public Sommet getOrigine(){

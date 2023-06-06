@@ -25,6 +25,7 @@ public class GraphView extends JPanel {
     private Cursor customCursor;
     private Graph graph;
     public Sommet selectedSommet;
+    public Sommet selectedDestination;
     public Arc selectedArc;
     public boolean canAdd ;
 
@@ -46,8 +47,8 @@ public class GraphView extends JPanel {
         startOffsetY = offsetY;
         startOffsetX = offsetX;
 
+        Sommet clickedSommet = null;
         selectedArc = null;
-        selectedSommet = null;
 
         for (Sommet sommet : graph.listeSommet) {
             int[] coordinates = modelToScreenCoordinates(sommet.getX(),sommet.getY());
@@ -55,13 +56,16 @@ public class GraphView extends JPanel {
             double distanceToSommet = sqrt(Math.pow(mouseX - coordinates[0], 2) + Math.pow(mouseY - coordinates[1], 2));
 
             if (distanceToSommet <= 8 * zoomScale ) {
-                selectedSommet = sommet;
+                clickedSommet = sommet;
                 repaint();
                 break;
             }
         }
 
-        if (selectedSommet == null) {
+
+        if (clickedSommet == null) {
+            selectedSommet = null;
+            selectedDestination = null;
             for(Rue rue : graph.listeRue){
                 for (Arc arc: rue.arcs){
                     int[] origin = modelToScreenCoordinates(arc.getOrigineX(),arc.getOrigineY());
@@ -78,17 +82,34 @@ public class GraphView extends JPanel {
             if(selectedArc==null){
                 setCursor(Cursor.getDefaultCursor());
             }
+            repaint();
+        }
+        else{
+            if(selectedSommet != clickedSommet && selectedSommet != null){
+                selectedDestination = clickedSommet;
+            }
+            else{
+                selectedSommet = clickedSommet;
+            }
         }
 
     }
 
-    public void move(int mouseX, int mouseY){
-        int offsetXChange = mouseX - startX;
-        int offsetYChange = mouseY - startY;
-        // Update the offsetX based on the mouse movement
-        offsetX = (int) (startOffsetX - offsetXChange/zoomScale);
-        offsetY = (int) (startOffsetY - offsetYChange/zoomScale);
-        // Repaint the graph to reflect the updated offsetX
+    public void mouseGrab(int mouseX, int mouseY){
+        if (selectedSommet != null){
+            selectedSommet.setX((int)( (mouseX + offsetX )/zoomScale));
+            selectedSommet.setY((int) ((mouseY + offsetY)/zoomScale));
+            System.out.println(mouseX);
+        }
+        else{
+            int offsetXChange = mouseX - startX;
+            int offsetYChange = mouseY - startY;
+            // Update the offsetX based on the mouse movement
+            offsetX = (int) (startOffsetX - offsetXChange/zoomScale);
+            offsetY = (int) (startOffsetY - offsetYChange/zoomScale);
+            // Repaint the graph to reflect the updated offsetX
+            System.out.println(startOffsetX);
+        }
         repaint();
     }
 
@@ -158,7 +179,7 @@ public class GraphView extends JPanel {
                     }
                 }
                 if(a==0){
-                    Sommet s = new Sommet(200,x,y,"unnamed");
+                    Sommet s = new Sommet(-1,x,y,"unnamed");
                     graph.addSommet(s);
                     canAdd = true;
                     repaint();
@@ -178,6 +199,22 @@ public class GraphView extends JPanel {
         g2d.translate(width/2,height/2);
         g2d.scale(zoomScale, zoomScale);
         g2d.translate(-offsetX-width/2,-offsetY-height/2);
+
+        int step = (int) (100*zoomScale);
+
+        int xStart = (int) ((-offsetX*zoomScale)%step - step);
+        int yStart = (int) ((-offsetY*zoomScale)%step - step);
+
+        int xRange = 1600;
+        int yRange = 1000;
+
+        g.setColor(new java.awt.Color(69, 123, 157));
+        for(int x=0; x < xRange; x+=step){
+            for(int y=0; y < yRange; y+=step){
+                g.drawLine(xStart +x,yStart, xStart +x, yStart + yRange);
+                g.drawLine(xStart,yStart +y, xStart + xRange, yStart +y);
+            }
+        }
 
         g2d.setColor(new java.awt.Color(69, 123, 157));
         for (Sommet sommet : graph.listeSommet) {
@@ -204,6 +241,13 @@ public class GraphView extends JPanel {
             int x = selectedSommet.getX();
             int y = selectedSommet.getY();
             g2d.fillOval(x - 8, y - 8, 16, 16);
+
+            g2d.setColor(new java.awt.Color(251, 133, 0));
+            if (selectedDestination!=null){
+                x = selectedDestination.getX();
+                y = selectedDestination.getY();
+                g2d.fillOval(x - 8, y - 8, 16, 16);
+            }
         }
         else if (selectedArc!=null){
             int origineX = selectedArc.getOrigineX();
