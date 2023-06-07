@@ -41,8 +41,8 @@ public class Graph {
             System.out.println("Error during deletion");
         }
     }
-
     public void buildFromFile(File file){
+
         listeSommet = new ArrayList<Sommet>();
         listeArc = new ArrayList<Arc>();
         listeRue = new ArrayList<Rue>();

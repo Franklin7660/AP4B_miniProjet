@@ -14,6 +14,9 @@ public class Sommet {
             ID++;
             this.id = ID;
         }
+        else{
+            this.id = id;
+        }
         this.x = x;
         this.y = y;
         this.nom = nom;
