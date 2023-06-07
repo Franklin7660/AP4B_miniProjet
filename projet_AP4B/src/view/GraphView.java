@@ -123,6 +123,10 @@ public class GraphView extends JPanel {
 
         repaint();
     }
+    public void resetZoom(){
+        zoomScale = 1;
+        repaint();
+    }
 
     private int[] modelToScreenCoordinates(int x, int y){
         int X = (int) ((x - offsetX -width/2)*zoomScale +width/2);

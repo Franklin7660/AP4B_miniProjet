@@ -10,6 +10,7 @@ public class SidePanel extends JPanel {
     public JButton deleteButton;
     public JButton exportButton;
     public JButton importButton;
+    public JButton resetZoom;
     public TextField graphName;
     public TextField setRue;
     public JButton InsertSommet;
@@ -86,6 +87,10 @@ public class SidePanel extends JPanel {
 
         Insertresponse = new JLabel();
         editManager.add(Insertresponse);
+
+        resetZoom = new JButton("Réinitialiser zoom");
+        editManager.add(resetZoom);
+
 
         add(editManager);
 

@@ -153,5 +153,12 @@ public class Control {
                 }
             }
         });
+
+        inter.sidePanel.resetZoom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inter.graphView.resetZoom();
+            }
+        });
     }
 }
