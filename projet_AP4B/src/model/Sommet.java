@@ -7,7 +7,9 @@ public class Sommet {
     private String nom ;
     private int x;
     private int y;
-    public List<Arc> listeArc;
+    public double shortestDistance;
+    public Sommet predecessor;
+    public boolean settled;
 
     public Sommet(int id, int x, int y , String nom){
         if(id==-1){

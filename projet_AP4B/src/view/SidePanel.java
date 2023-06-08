@@ -15,7 +15,9 @@ public class SidePanel extends JPanel {
     public TextField setRue;
     public JButton InsertSommet;
     public JButton InsertArc;
+    public JButton getPath;
     public JLabel infoLabel;
+    public JLabel pathLength;
     public TextField Xsommet;
     public TextField Ysommet;
 
@@ -74,9 +76,9 @@ public class SidePanel extends JPanel {
         JPanel editRue = new JPanel();
         editManager.add(editRue);
 
-        editRue.add(new JLabel("Nom de rue :"));
+        editRue.add(new JLabel("Nom de rue"));
 
-        setRue = new TextField("Nom de rue");
+        setRue = new TextField("unnamed");
         setRue.setMaximumSize(new Dimension(280,20));
         editRue.add(setRue);
 
@@ -91,8 +93,15 @@ public class SidePanel extends JPanel {
         resetZoom = new JButton("Réinitialiser zoom");
         editManager.add(resetZoom);
 
-
         add(editManager);
+
+        JPanel pathManager = new JPanel();
+        getPath = new JButton("Calculer l'itinéraire");
+        pathManager.add(getPath);
+        pathLength = new JLabel("Distance : 0m");
+        pathManager.add(pathLength);
+
+        add(pathManager);
 
     }
 }

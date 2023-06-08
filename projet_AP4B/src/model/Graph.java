@@ -5,12 +5,14 @@ import java.util.*;
 import java.io.File;
 import java.nio.file.*;
 
+import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 public class Graph {
     public List<Sommet> listeSommet;
     public List<Arc> listeArc;
     public List<Rue> listeRue;
+    public double pathLength;
     public Graph()
     {
 
@@ -18,7 +20,75 @@ public class Graph {
         listeArc = new ArrayList<Arc>();
         listeRue = new ArrayList<Rue>();
     }
+    public List<Arc> shortestPath(Sommet depart, Sommet arrive){
+        boolean pathExists = true;
+        for( Sommet sommet: listeSommet){
+            sommet.predecessor = null;
+            sommet.shortestDistance = -1;
+            sommet.settled = false;
+        }
+        depart.shortestDistance = 0;
+        depart.settled = true;
 
+        Sommet selected = depart;
+        while(selected != arrive){
+            if (selected == null){
+                pathExists = false;
+                System.out.println("No way out !");
+                break;
+            }
+            selected = pathNextStep(selected);
+        }
+
+        if(pathExists){
+            List<Arc> answer = new ArrayList();
+            while (selected != depart){
+                for( Arc arc : listeArc ){
+                    if(arc.getOrigine() == selected && arc.getDestination() == selected.predecessor){
+                        answer.add(arc);
+                        selected = selected.predecessor;
+                        break;
+                    }
+                }
+            }
+            return answer;
+        }
+        else{
+            return null;
+        }
+    }
+    public Sommet pathNextStep(Sommet Selected){
+        Sommet selected = Selected;
+
+        for( Arc arc : listeArc ){
+            if(arc.getOrigine() == selected){
+                Sommet destination = arc.getDestination();
+                int x1 = selected.getX();
+                int y1 = selected.getY();
+                int x2 = destination.getX();
+                int y2 = destination.getY();
+
+                double distance = sqrt(pow(x1 - x2,2) + pow(y1 - y2,2)) + selected.shortestDistance;
+                if (distance < destination.shortestDistance || destination.shortestDistance == -1){
+                    destination.shortestDistance = distance;
+                    destination.predecessor = selected;
+                }
+            }
+        }
+
+        double distanceMin = -1;
+        for( Sommet sommet : listeSommet){
+            if((sommet.shortestDistance < distanceMin || distanceMin == -1) && !sommet.settled){
+                distanceMin = sommet.shortestDistance;
+                selected = sommet;
+            }
+        }
+        if(distanceMin != -1){
+            selected.settled = true;
+            return selected;
+        }
+        else return null;
+    }
     public void deleteElement(Object o){
         if(o instanceof Arc){
             ((Arc) o).rue.arcs.remove(o);
@@ -110,6 +180,7 @@ public class Graph {
                     addArc(new Arc(getSommetById(or),getSommetById(dest),getRueByName(rue)));
                     if(dSens==1){
                         addArc(new Arc(getSommetById(dest),getSommetById(or),getRueByName(rue)));
+                        System.out.println("Double sens !");
                     }
                 }
             }

@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Control {
@@ -38,35 +39,28 @@ public class Control {
             public void mouseMoved(MouseEvent e) { inter.graphView.checkHover(e.getX(),e.getY()); }
         });
 
-        inter.sidePanel.exportButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                graph.export(inter.sidePanel.graphName.getText() + ".txt");
-                inter.sidePanel.infoLabel.setText("Graph exporté !");
-            }
+        inter.sidePanel.exportButton.addActionListener(e -> {
+            graph.export(inter.sidePanel.graphName.getText() + ".txt");
+            inter.sidePanel.infoLabel.setText("Graph exporté !");
         });
 
-        inter.sidePanel.InsertSommet.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int x = Integer.parseInt(inter.sidePanel.Xsommet.getText());
-                int y = Integer.parseInt(inter.sidePanel.Ysommet.getText());
-                inter.graphView.InsertSommet(x,y);
-                if(inter.graphView.canAdd){
-                    inter.sidePanel.Insertresponse.setText("sommet ajoutée");
-                }
-                else{
-                    inter.sidePanel.Insertresponse.setText("sommet déja éxiste");
-                }
-
-
-
+        inter.sidePanel.InsertSommet.addActionListener(e -> {
+            int x = Integer.parseInt(inter.sidePanel.Xsommet.getText());
+            int y = Integer.parseInt(inter.sidePanel.Ysommet.getText());
+            inter.graphView.InsertSommet(x,y);
+            if(inter.graphView.canAdd){
+                inter.sidePanel.Insertresponse.setText("sommet ajoutée");
             }
+            else{
+                inter.sidePanel.Insertresponse.setText("sommet déja éxiste");
+            }
+
+
+
         });
 
-        inter.sidePanel.InsertArc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        inter.sidePanel.InsertArc.addActionListener(e -> {
+            if(inter.graphView.selectedDestination != null){
                 Sommet or = inter.graphView.selectedSommet;
                 Sommet dest = inter.graphView.selectedDestination;
                 Rue rue = graph.getRueByName(inter.sidePanel.setRue.getText());
@@ -77,26 +71,27 @@ public class Control {
                 }
                 inter.repaint();
             }
+            else{
+                inter.sidePanel.infoLabel.setText("Veuillez sélectionner deux sommets");
+            }
+
         });
 
-        inter.sidePanel.exportButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setApproveButtonText("Save");
-                fileChooser.setSelectedFile(new File("myFile.txt"));
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
-                fileChooser.setFileFilter(filter);
+        inter.sidePanel.exportButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setApproveButtonText("Save");
+            fileChooser.setSelectedFile(new File("myFile.txt"));
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
+            fileChooser.setFileFilter(filter);
 
-                int result = fileChooser.showOpenDialog(inter.graphView);
-                if(result==JFileChooser.APPROVE_OPTION){
-                    File selectedfile = fileChooser.getSelectedFile();
-                    graph.export(selectedfile.getPath());
-
-                }
-
+            int result = fileChooser.showOpenDialog(inter.graphView);
+            if(result==JFileChooser.APPROVE_OPTION){
+                File selectedfile = fileChooser.getSelectedFile();
+                graph.export(selectedfile.getPath());
 
             }
+
+
         });
 
         inter.sidePanel.importButton.addActionListener(new ActionListener() {
@@ -133,32 +128,40 @@ public class Control {
             }
         });
 
-        inter.sidePanel.deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (inter.graphView.selectedSommet != null){
-                    graph.deleteElement(inter.graphView.selectedSommet);
-                    inter.sidePanel.infoLabel.setText("Sommet supprimé !");
-                    inter.graphView.selectedSommet = null;
-                    inter.repaint();
-                }
-                else if (inter.graphView.selectedArc != null){
-                    graph.deleteElement(inter.graphView.selectedArc);
-                    inter.sidePanel.infoLabel.setText("Arc supprimé !");
-                    inter.graphView.selectedArc = null;
-                    inter.repaint();
-                }
-                else{
-                    inter.sidePanel.infoLabel.setText("Impossible de supprimer, aucun élément sélectionné !");
-                }
+        inter.sidePanel.deleteButton.addActionListener(e -> {
+            if (inter.graphView.selectedSommet != null){
+                graph.deleteElement(inter.graphView.selectedSommet);
+                inter.sidePanel.infoLabel.setText("Sommet supprimé !");
+                inter.graphView.selectedSommet = null;
+                inter.repaint();
+            }
+            else if (inter.graphView.selectedArc != null){
+                graph.deleteElement(inter.graphView.selectedArc);
+                inter.sidePanel.infoLabel.setText("Arc supprimé !");
+                inter.graphView.selectedArc = null;
+                inter.repaint();
+            }
+            else{
+                inter.sidePanel.infoLabel.setText("Impossible de supprimer, aucun élément sélectionné !");
             }
         });
 
-        inter.sidePanel.resetZoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inter.graphView.resetZoom();
+        inter.sidePanel.resetZoom.addActionListener(e -> inter.graphView.resetZoom());
+
+        inter.sidePanel.getPath.addActionListener(e -> {
+            if(inter.graphView.selectedDestination != null){
+                inter.graphView.path = graph.shortestPath(inter.graphView.selectedSommet,inter.graphView.selectedDestination);
+                if(inter.graphView.path != null){
+                    inter.sidePanel.pathLength.setText("Distance : " + graph.pathLength);
+                }
+                else{
+                    inter.sidePanel.pathLength.setText("Aucun chemin ne relie ces sommets");
+                }
             }
+            else{
+                inter.sidePanel.pathLength.setText("Veuillez sélectionner le départ et la destination");
+            }
+            inter.repaint();
         });
     }
 }

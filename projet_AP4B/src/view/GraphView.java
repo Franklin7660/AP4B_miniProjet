@@ -8,6 +8,8 @@ import model.Sommet;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Math.sqrt;
 
@@ -28,9 +30,12 @@ public class GraphView extends JPanel {
     public Sommet selectedDestination;
     public Arc selectedArc;
     public boolean canAdd ;
+    public List<Arc> path;
 
     public GraphView(int graphWidth,int graphHeight, Graph pgraph) {
         graph = pgraph;
+
+        path = null;
 
         width = graphWidth;
         height = graphHeight;
@@ -99,7 +104,6 @@ public class GraphView extends JPanel {
         if (selectedSommet != null){
             selectedSommet.setX((int)( (mouseX + offsetX )/zoomScale));
             selectedSommet.setY((int) ((mouseY + offsetY)/zoomScale));
-            System.out.println(mouseX);
         }
         else{
             int offsetXChange = mouseX - startX;
@@ -108,7 +112,6 @@ public class GraphView extends JPanel {
             offsetX = (int) (startOffsetX - offsetXChange/zoomScale);
             offsetY = (int) (startOffsetY - offsetYChange/zoomScale);
             // Repaint the graph to reflect the updated offsetX
-            System.out.println(startOffsetX);
         }
         repaint();
     }
@@ -261,6 +264,19 @@ public class GraphView extends JPanel {
             Stroke stroke = new BasicStroke(4f);
             g2d.setStroke(stroke);
             g2d.drawLine(origineX, origineY, destinationX, destinationY);
+        }
+
+        if(path != null){
+            g2d.setColor(new java.awt.Color(17, 213, 56));
+            for (Arc arc: path){
+                int origineX = arc.getOrigineX();
+                int origineY = arc.getOrigineY();
+                int destinationX = arc.getDestinationX();
+                int destinationY = arc.getDestinationY();
+                Stroke stroke = new BasicStroke(4f);
+                g2d.setStroke(stroke);
+                g2d.drawLine(origineX, origineY, destinationX, destinationY);
+            }
         }
 
         g2d.dispose();

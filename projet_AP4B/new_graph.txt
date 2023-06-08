@@ -1,35 +1,62 @@
-sommet id=1 x=100 y=50
-sommet id=2 x=200 y=50
-sommet id=3 x=300 y=50
-sommet id=4 x=400 y=50
-sommet id=5 x=100 y=200
-sommet id=6 x=143 y=374
-sommet id=7 x=300 y=300
-sommet id=8 x=474 y=569
+sommet id=1 x=115 y=619
+sommet id=2 x=817 y=431
+sommet id=3 x=237 y=218
+sommet id=4 x=319 y=344
+sommet id=5 x=404 y=474
 
-rue nom=Jean_Jaures
-rue nom=Frank_Russel
-rue nom=Jason_Boulos
-rue nom=Francois_Delcroix
-rue nom=Mouad_Boufenzi
-rue nom=James_Bond
+rue nom=unnamed
 
-arc or=1 dest=2 rue=Jean_Jaures
-arc or=2 dest=1 rue=Jean_Jaures
-arc or=3 dest=4 rue=Jean_Jaures
-arc or=4 dest=3 rue=Jean_Jaures
-arc or=5 dest=6 rue=Frank_Russel
-arc or=6 dest=5 rue=Frank_Russel
-arc or=6 dest=7 rue=Frank_Russel
-arc or=7 dest=6 rue=Frank_Russel
-arc or=7 dest=8 rue=Frank_Russel
-arc or=8 dest=7 rue=Frank_Russel
-arc or=1 dest=5 rue=Jason_Boulos
-arc or=5 dest=1 rue=Jason_Boulos
-arc or=6 dest=2 rue=Francois_Delcroix
-arc or=3 dest=7 rue=Mouad_Boufenzi
-arc or=7 dest=3 rue=Mouad_Boufenzi
-arc or=4 dest=8 rue=James_Bond
-arc or=8 dest=4 rue=James_Bond
+arc or=3 dest=4 rue=unnamed
+arc or=4 dest=3 rue=unnamed
+arc or=4 dest=3 rue=unnamed
+arc or=3 dest=4 rue=unnamed
+arc or=4 dest=5 rue=unnamed
+arc or=5 dest=4 rue=unnamed
+arc or=5 dest=4 rue=unnamed
+arc or=4 dest=5 rue=unnamed
+arc or=5 dest=2 rue=unnamed
+arc or=2 dest=5 rue=unnamed
+arc or=2 dest=5 rue=unnamed
+arc or=5 dest=2 rue=unnamed
+arc or=2 dest=1 rue=unnamed
+arc or=1 dest=2 rue=unnamed
+arc or=1 dest=2 rue=unnamed
+arc or=2 dest=1 rue=unnamed
+arc or=1 dest=3 rue=unnamed
+arc or=3 dest=1 rue=unnamed
+arc or=3 dest=1 rue=unnamed
+arc or=1 dest=3 rue=unnamed
+arc or=1 dest=5 rue=unnamed
+arc or=5 dest=1 rue=unnamed
+arc or=5 dest=1 rue=unnamed
+arc or=1 dest=5 rue=unnamed
+arc or=1 dest=3 rue=unnamed
+arc or=3 dest=1 rue=unnamed
+arc or=3 dest=1 rue=unnamed
+arc or=1 dest=3 rue=unnamed
+arc or=1 dest=4 rue=unnamed
+arc or=4 dest=1 rue=unnamed
+arc or=4 dest=1 rue=unnamed
+arc or=1 dest=4 rue=unnamed
+arc or=1 dest=5 rue=unnamed
+arc or=5 dest=1 rue=unnamed
+arc or=5 dest=1 rue=unnamed
+arc or=1 dest=5 rue=unnamed
+arc or=1 dest=1 rue=unnamed
+arc or=1 dest=1 rue=unnamed
+arc or=1 dest=1 rue=unnamed
+arc or=1 dest=1 rue=unnamed
+arc or=2 dest=5 rue=unnamed
+arc or=5 dest=2 rue=unnamed
+arc or=5 dest=2 rue=unnamed
+arc or=2 dest=5 rue=unnamed
+arc or=2 dest=4 rue=unnamed
+arc or=4 dest=2 rue=unnamed
+arc or=4 dest=2 rue=unnamed
+arc or=2 dest=4 rue=unnamed
+arc or=2 dest=3 rue=unnamed
+arc or=3 dest=2 rue=unnamed
+arc or=3 dest=2 rue=unnamed
+arc or=2 dest=3 rue=unnamed
 
 end
