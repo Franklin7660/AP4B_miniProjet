@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 public class Sommet {
-    private static int ID = 0 ;
+    public static int ID = 0 ;
     private int id;
     private String nom ;
     private int x;

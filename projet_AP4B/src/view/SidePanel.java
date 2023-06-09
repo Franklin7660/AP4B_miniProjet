@@ -47,6 +47,7 @@ public class SidePanel extends JPanel {
         infoLabel = new JLabel("");
         fileManager.add(infoLabel);
 
+        //fileManager.setSize(new Dimension(280,200));
         add(fileManager);
 
         editManager = new JPanel();
@@ -91,7 +92,7 @@ public class SidePanel extends JPanel {
         editManager.add(Insertresponse);
 
         resetZoom = new JButton("Réinitialiser zoom");
-        editManager.add(resetZoom);
+        fileManager.add(resetZoom);
 
         add(editManager);
 

@@ -24,7 +24,7 @@ public class Graph {
         boolean pathExists = true;
         for( Sommet sommet: listeSommet){
             sommet.predecessor = null;
-            sommet.shortestDistance = -1;
+            sommet.shortestDistance = pow(2,11);
             sommet.settled = false;
         }
         depart.shortestDistance = 0;
@@ -76,18 +76,19 @@ public class Graph {
             }
         }
 
-        double distanceMin = -1;
+        selected.settled = true;
+
+        double distanceMin = pow(2,12);
         for( Sommet sommet : listeSommet){
-            if((sommet.shortestDistance < distanceMin || distanceMin == -1) && !sommet.settled){
+            if((sommet.shortestDistance < distanceMin) && !sommet.settled){
                 distanceMin = sommet.shortestDistance;
                 selected = sommet;
             }
         }
         if(distanceMin != -1){
-            selected.settled = true;
             return selected;
         }
-        else return null;
+        return null;
     }
     public void deleteElement(Object o){
         if(o instanceof Arc){
@@ -164,7 +165,6 @@ public class Graph {
                     String[] attributes = Arrays.copyOfRange(subStrings, 1, subStrings.length);
                     int or =0;
                     int dest =0;
-                    int dSens = 1;
                     String rue = "unnamed";
 
                     for(String attribute : attributes){
@@ -175,16 +175,12 @@ public class Graph {
                         if (Objects.equals(name, "or")){or = Integer.parseInt(value);}
                         else if (Objects.equals(name, "dest")){dest = Integer.parseInt(value);}
                         else if (Objects.equals(name, "rue")){rue = value;}
-                        else if (Objects.equals(name, "doublesens")){dSens = Integer.parseInt(value);}
                     }
                     addArc(new Arc(getSommetById(or),getSommetById(dest),getRueByName(rue)));
-                    if(dSens==1){
-                        addArc(new Arc(getSommetById(dest),getSommetById(or),getRueByName(rue)));
-                        System.out.println("Double sens !");
-                    }
                 }
             }
 
+            Sommet.ID = listeSommet.size();
 
         } catch (IOException e) {
             System.out.println("Error : Graph file was not found");

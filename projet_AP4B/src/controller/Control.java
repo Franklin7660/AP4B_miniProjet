@@ -149,6 +149,7 @@ public class Control {
         inter.sidePanel.resetZoom.addActionListener(e -> inter.graphView.resetZoom());
 
         inter.sidePanel.getPath.addActionListener(e -> {
+            inter.graphView.path = null;
             if(inter.graphView.selectedDestination != null){
                 inter.graphView.path = graph.shortestPath(inter.graphView.selectedSommet,inter.graphView.selectedDestination);
                 if(inter.graphView.path != null){
