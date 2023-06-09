@@ -15,6 +15,8 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import static java.lang.Math.round;
+
 public class Control {
 
 
@@ -153,7 +155,7 @@ public class Control {
             if(inter.graphView.selectedDestination != null){
                 inter.graphView.path = graph.shortestPath(inter.graphView.selectedSommet,inter.graphView.selectedDestination);
                 if(inter.graphView.path != null){
-                    inter.sidePanel.pathLength.setText("Distance : " + graph.pathLength);
+                    inter.sidePanel.pathLength.setText("Distance : " + (int)graph.pathLength);
                 }
                 else{
                     inter.sidePanel.pathLength.setText("Aucun chemin ne relie ces sommets");

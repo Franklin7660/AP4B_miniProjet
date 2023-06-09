@@ -22,6 +22,8 @@ public class Graph {
     }
     public List<Arc> shortestPath(Sommet depart, Sommet arrive){
         boolean pathExists = true;
+        pathLength = 0;
+
         for( Sommet sommet: listeSommet){
             sommet.predecessor = null;
             sommet.shortestDistance = pow(2,11);
@@ -46,6 +48,7 @@ public class Graph {
                 for( Arc arc : listeArc ){
                     if(arc.getOrigine() == selected && arc.getDestination() == selected.predecessor){
                         answer.add(arc);
+                        pathLength += arc.getDistance();
                         selected = selected.predecessor;
                         break;
                     }
@@ -63,12 +66,8 @@ public class Graph {
         for( Arc arc : listeArc ){
             if(arc.getOrigine() == selected){
                 Sommet destination = arc.getDestination();
-                int x1 = selected.getX();
-                int y1 = selected.getY();
-                int x2 = destination.getX();
-                int y2 = destination.getY();
 
-                double distance = sqrt(pow(x1 - x2,2) + pow(y1 - y2,2)) + selected.shortestDistance;
+                double distance = arc.getDistance() + selected.shortestDistance;
                 if (distance < destination.shortestDistance || destination.shortestDistance == -1){
                     destination.shortestDistance = distance;
                     destination.predecessor = selected;

@@ -1,5 +1,8 @@
 package model;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Arc {
     private Sommet origine;
     private Sommet destination;
@@ -41,6 +44,9 @@ public class Arc {
         double deltaY = destinationY - originY;
 
         return Math.atan2(deltaY, deltaX);
+    }
+    public double getDistance(){
+        return sqrt(pow(getOrigineX() - getDestinationX(),2) + pow(getOrigineY() - getDestinationY(),2));
     }
 
     public int getDestinationX(){

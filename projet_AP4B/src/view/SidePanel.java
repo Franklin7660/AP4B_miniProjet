@@ -86,6 +86,7 @@ public class SidePanel extends JPanel {
         editManager.add(editRue);
 
         doubleSens = new JCheckBox("Double Sens");
+        doubleSens.setSelected(true);
         editManager.add(doubleSens);
 
         Insertresponse = new JLabel();
